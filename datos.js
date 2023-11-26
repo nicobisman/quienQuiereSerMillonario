@@ -115,7 +115,7 @@ const preguntas = {
     pregunta15: {
         pregunta: "¿En qué Mundial Diego Maradona fue capitán de la selección argentina?",
         opcionA: "Italia 1990",
-        opcionB: "México 1986",
+        opcionB: "Brasil 2014",
         opcionC: "España 1982",
         opcionD: "Francia 1998",
         respuestaCorrecta: "Italia 1990",
@@ -137,7 +137,7 @@ const preguntas = {
         respuestaCorrecta: "Carlos Gardel",
     },
     pregunta18: {
-        pregunta: "¿Cuál es el equipo de fútbol más laureado de Argentina?",
+        pregunta: "¿Cuál es el equipo de fútbol más laureado en copas Libertaores de Argentina?",
         opcionA: "River Plate",
         opcionB: "Boca Juniors",
         opcionC: "Independiente",
@@ -153,12 +153,12 @@ const preguntas = {
         respuestaCorrecta: "1951",
     },
     pregunta20: {
-        pregunta: "¿Quién es la escritora argentina ganadora del Premio Nobel de Literatura en 2010?",
-        opcionA: "Jorge Luis Borges",
-        opcionB: "Julio Cortázar",
-        opcionC: "Adolfo Bioy Casares",
-        opcionD: "César Aira",
-        respuestaCorrecta: "Jorge Luis Borges",
+        pregunta: "¿En qué año Lionel Messi ganó su primer Balón de Oro?",
+        opcionA: "2008",
+        opcionB: "2010",
+        opcionC: "2012",
+        opcionD: "2015",
+        respuestaCorrecta: "2009",
     },
     pregunta21: {
         pregunta: "¿Cuál es el monumento más icónico de la ciudad de Buenos Aires?",

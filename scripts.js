@@ -27,12 +27,16 @@ const juego = {
     //declaro las variables que controlan el juego
     preguntasContestadas: 0,
     dineroGanado: 0,
+    preguntaRandom: 0,
+    preguntasUsadas: [],
     limpiarJuego: function () {
         //limpia los datos del juego para reiniciar
         document.getElementById("premioActual").innerHTML = "Premio actual: 0";
         document.getElementById("preguntasContestadas").innerHTML = "Preguntas contestadas: 0";
+        this.preguntaRandom = 0;
         this.preguntasContestadas = 0;
         this.dineroGanado = 0;
+        this.preguntasUsadas = [];
         desactivarBotones();
         //Empezar se convierte en empezar de nuevo
         document.getElementById("botonEmpezar").innerHTML = "Empezar de nuevo";
@@ -44,7 +48,8 @@ const juego = {
         this.megaFuncionPreguntas();
     },
     megaFuncionPreguntas: function () {
-        this.modificarPremioActual();
+        this.modificarInformacion();
+        this.randomizadorPreguntas();
         //si preguntasContestadas es 15 se gana
         if (this.preguntasContestadas == 15) {
             this.ganar();
@@ -53,7 +58,22 @@ const juego = {
             this.modificarBotonesYPreguntas();
         }
     },
-    modificarPremioActual: function () {
+    randomizadorPreguntas: function () {
+        //guarda en pregunta random un numero del 0 al 100
+        this.preguntaRandom = Math.floor(Math.random() * 100) + 1;
+        //si la pregunta ya fue elegida hay recursividad
+        if (this.preguntasUsadas.includes(this.preguntaRandom)) {
+            this.randomizadorPreguntas();
+        } else {
+            //si no se agrega la pregunta a un array para que no se repita
+            this.preguntasUsadas.push(this.preguntaRandom);
+        }
+    },
+    modificarInformacion: function () {
+        //imprime en pantalla cuantas preguntas se contestaron
+        document.getElementById(
+            "preguntasContestadas"
+        ).innerHTML = `Preguntas contestadas: ${this.preguntasContestadas}`;
         switch (this.preguntasContestadas) {
             case 0:
                 //si no se contesto ninguna pregunta el premio actual es 0
@@ -73,23 +93,19 @@ const juego = {
         }
     },
     modificarBotonesYPreguntas: function () {
-        //imprime en pantalla cuantas preguntas se contestaron
-        document.getElementById(
-            "preguntasContestadas"
-        ).innerHTML = `Preguntas contestadas: ${this.preguntasContestadas}`;
         //Declaro pregunta deseada
-        let preguntaDeseada = preguntas["pregunta" + (this.preguntasContestadas + 1)].pregunta;
+        preguntaDeseada = preguntas["pregunta" + this.preguntaRandom].pregunta;
         //La imprimo en pantalla
         document.getElementById("pregunta").innerHTML = preguntaDeseada;
         //Declaro la respuesta deseada
-        let respuestaADeseada = preguntas["pregunta" + (this.preguntasContestadas + 1)].opcionA;
+        let respuestaADeseada = preguntas["pregunta" + this.preguntaRandom].opcionA;
         //La imprimo en pantalla
         document.getElementById("botonRespuesta1").innerHTML = respuestaADeseada;
-        let respuestaBDeseada = preguntas["pregunta" + (this.preguntasContestadas + 1)].opcionB;
+        let respuestaBDeseada = preguntas["pregunta" + this.preguntaRandom].opcionB;
         document.getElementById("botonRespuesta2").innerHTML = respuestaBDeseada;
-        let respuestaCDeseada = preguntas["pregunta" + (this.preguntasContestadas + 1)].opcionC;
+        let respuestaCDeseada = preguntas["pregunta" + this.preguntaRandom].opcionC;
         document.getElementById("botonRespuesta3").innerHTML = respuestaCDeseada;
-        let respuestaDeseada = preguntas["pregunta" + (this.preguntasContestadas + 1)].opcionD;
+        let respuestaDeseada = preguntas["pregunta" + this.preguntaRandom].opcionD;
         document.getElementById("botonRespuesta4").innerHTML = respuestaDeseada;
     },
 
@@ -99,19 +115,19 @@ const juego = {
         switch (opcionElegida) {
             //si la opcion elegida es la 1 opcionElegidaLetras será igual a la opcionA
             case 1:
-                opcionElegidaL = preguntas["pregunta" + (this.preguntasContestadas + 1)].opcionA;
+                opcionElegidaL = preguntas["pregunta" + this.preguntaRandom].opcionA;
                 break;
             case 2:
-                opcionElegidaL = preguntas["pregunta" + (this.preguntasContestadas + 1)].opcionB;
+                opcionElegidaL = preguntas["pregunta" + this.preguntaRandom].opcionB;
                 break;
             case 3:
-                opcionElegidaL = preguntas["pregunta" + (this.preguntasContestadas + 1)].opcionC;
+                opcionElegidaL = preguntas["pregunta" + this.preguntaRandom].opcionC;
                 break;
             case 4:
-                opcionElegidaL = preguntas["pregunta" + (this.preguntasContestadas + 1)].opcionD;
+                opcionElegidaL = preguntas["pregunta" + this.preguntaRandom].opcionD;
                 break;
         }
-        switch (preguntas["pregunta" + (this.preguntasContestadas + 1)].respuestaCorrecta) {
+        switch (preguntas["pregunta" + this.preguntaRandom].respuestaCorrecta) {
             //activa todos los botones, menos el de empezar que lo desactiva
             case opcionElegidaL:
                 this.preguntasContestadas++;
