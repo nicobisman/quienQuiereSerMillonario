@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>¿Quien quiere ser millonario?</title>
+        <script src="datos.js" defer></script>
+        <script src="scripts.js" defer></script>
+    </head>
+    <body onload="desactivarBotones()">
+        <h1>¿Quien quiere ser millonario?</h1>
+        <table border="1px">
+            <h3 style="font-weight: bold" id="estadoDeJuego" border="1px">El juego no ha comenzado</h3>
+            <tr>
+                <td colspan="2" style="font-weight: bold">Informacion:</td>
+            </tr>
+            <tr>
+                <td id="premioActual">Premio actual: 0</td>
+            </tr>
+            <tr>
+                <td id="preguntasContestadas">Preguntas contestadas: 0</td>
+            </tr>
+        </table>
+        <br />
+        <table border="1px">
+            <tr>
+                <td colspan="2" style="font-weight: bold"><div id="pregunta">Pregunta</div></td>
+            </tr>
+            <tr>
+                <td>
+                    <button id="botonRespuesta1" onclick="juego.logicaPreguntas(1)">Respuesta 1</button>
+                </td>
+                <td>
+                    <button id="botonRespuesta2" onclick="juego.logicaPreguntas(2)">Respuesta 2</button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button id="botonRespuesta3" onclick="juego.logicaPreguntas(3)">Respuesta 3</button>
+                </td>
+                <td>
+                    <button id="botonRespuesta4" onclick="juego.logicaPreguntas(4)">Respuesta 4</button>
+                </td>
+            </tr>
+        </table>
+        <br />
+        <table border="1px">
+            <tr>
+                <td colspan="2" style="font-weight: bold">Comodines</td>
+            </tr>
+            <tr>
+                <td><button id="boton50">50/50</button></td>
+                <td><button id="botonPublico">Consulta al publico</button></td>
+            </tr>
+            <tr>
+                <td><button id="botonAmigo">Llama a un amigo</button></td>
+            </tr>
+        </table>
+        <br />
+        <table border="1px">
+            <tr>
+                <td colspan="2" style="font-weight: bold">Botones</td>
+            </tr>
+            <tr>
+                <td><button onclick="juego.empezar()" id="botonEmpezar">Empezar</button></td>
+                <td><button id="botonRetirarse" onclick="juego.retirarse()">Retirarse</button></td>
+            </tr>
+        </table>
+    </body>
+</html>
