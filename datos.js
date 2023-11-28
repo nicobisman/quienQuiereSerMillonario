@@ -146,7 +146,7 @@ const preguntas = {
     },
     pregunta19: {
         pregunta: "¿En qué año se realizó la primera transmisión de televisión en Argentina?",
-        opcionA: "1950",
+        opcionA: "1951",
         opcionB: "1955",
         opcionC: "1960",
         opcionD: "1965",
@@ -154,7 +154,7 @@ const preguntas = {
     },
     pregunta20: {
         pregunta: "¿En qué año Lionel Messi ganó su primer Balón de Oro?",
-        opcionA: "2008",
+        opcionA: "2009",
         opcionB: "2010",
         opcionC: "2012",
         opcionD: "2015",
@@ -259,7 +259,7 @@ const preguntas = {
     pregunta33: {
         pregunta: "¿En qué año se estableció la independencia de Argentina?",
         opcionA: "1810",
-        opcionB: "1820",
+        opcionB: "1816",
         opcionC: "1830",
         opcionD: "1840",
         respuestaCorrecta: "1816",
@@ -483,7 +483,7 @@ const preguntas = {
     pregunta61: {
         pregunta: "¿En qué año se inauguró el Teatro Nacional Cervantes en Buenos Aires?",
         opcionA: "1915",
-        opcionB: "1920",
+        opcionB: "1921",
         opcionC: "1925",
         opcionD: "1930",
         respuestaCorrecta: "1921",
@@ -497,7 +497,7 @@ const preguntas = {
         respuestaCorrecta: "Asado",
     },
     pregunta63: {
-        pregunta: "¿Quién fue el presidente argentino conocido como 'El Padre de la Patria'?",
+        pregunta: "¿Quién fue el prócer argentino conocido como 'El Padre de la Patria'?",
         opcionA: "Mariano Moreno",
         opcionB: "Manuel Belgrano",
         opcionC: "Juan José Castelli",
@@ -553,7 +553,7 @@ const preguntas = {
         respuestaCorrecta: "1920",
     },
     pregunta70: {
-        pregunta: "¿Quién fue el líder sindical argentino y ex presidente del país?",
+        pregunta: "¿Quién fue el líder  argentino y ex presidente del país que le dio mucho poder a la CGT?",
         opcionA: "Hugo Moyano",
         opcionB: "Carlos Menem",
         opcionC: "Juan Domingo Perón",
@@ -649,7 +649,7 @@ const preguntas = {
         respuestaCorrecta: "Carnaval",
     },
     pregunta82: {
-        pregunta: "¿Quién fue la destacada escritora argentina ganadora del Premio Nobel de la Paz en 1976?",
+        pregunta: "¿Quién fue la escritora ganadora del Premio Nobel de la literatura en 1976",
         opcionA: "Victoria Ocampo",
         opcionB: "Alejandra Pizarnik",
         opcionC: "Gabriela Mistral",

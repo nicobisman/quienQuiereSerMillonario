@@ -50,8 +50,8 @@ const juego = {
     megaFuncionPreguntas: function () {
         this.modificarInformacion();
         this.randomizadorPreguntas();
-        //si preguntasContestadas es 15 se gana
-        if (this.preguntasContestadas == 15) {
+        //si preguntasContestadas es 5 se gana
+        if (this.preguntasContestadas == 5) {
             this.ganar();
         } else {
             //si no continúa el juego
@@ -81,7 +81,7 @@ const juego = {
                 break;
             default:
                 //si se ha contestado alguna se calculara con la funcion y=15^x
-                this.dineroGanado = Math.pow(1000000, 1 / 15) ** this.preguntasContestadas;
+                this.dineroGanado = Math.pow(1000000, 1 / 5) ** this.preguntasContestadas;
                 //se sacan los decimales
                 this.dineroGanado = Math.trunc(this.dineroGanado);
                 //se agregan los puntos
