@@ -23,12 +23,24 @@ function activarBotones() {
     document.getElementById("botonRetirarse").disabled = false;
     document.getElementById("botonEmpezar").disabled = true;
 }
+
+function activarBotonesRespuestas() {
+    //activa todos los botones de respuestas
+    document.getElementById("botonRespuesta1").disabled = false;
+    document.getElementById("botonRespuesta2").disabled = false;
+    document.getElementById("botonRespuesta3").disabled = false;
+    document.getElementById("botonRespuesta4").disabled = false;
+}
+
 const juego = {
     //declaro las variables que controlan el juego
     preguntasContestadas: 0,
     dineroGanado: 0,
     preguntaRandom: 0,
     preguntasUsadas: [],
+    respuestaCorrecta50: null,
+    desactivadorRandom1: null,
+    desactivadorRandom2: null,
     limpiarJuego: function () {
         //limpia los datos del juego para reiniciar
         document.getElementById("premioActual").innerHTML = "Premio actual: 0";
@@ -37,6 +49,8 @@ const juego = {
         this.preguntasContestadas = 0;
         this.dineroGanado = 0;
         this.preguntasUsadas = [];
+        this.desactivadorRandom1 = null;
+        this.desactivadorRandom2 = null;
         desactivarBotones();
         //Empezar se convierte en empezar de nuevo
         document.getElementById("botonEmpezar").innerHTML = "Empezar de nuevo";
@@ -60,7 +74,7 @@ const juego = {
     },
     randomizadorPreguntas: function () {
         //guarda en pregunta random un numero del 0 al 100
-        this.preguntaRandom = Math.floor(Math.random() * 100) + 1;
+        this.preguntaRandom = Math.floor(Math.random() * 15) + 1;
         //si la pregunta ya fue elegida hay recursividad
         if (this.preguntasUsadas.includes(this.preguntaRandom)) {
             this.randomizadorPreguntas();
@@ -111,6 +125,8 @@ const juego = {
 
     //el parametro opcionElegida depende del boton tocado
     logicaPreguntas: function (opcionElegida) {
+        //activo los botones por si se ha tocado anteriormente el botón50
+        activarBotonesRespuestas();
         let opcionElegidaL;
         switch (opcionElegida) {
             //si la opcion elegida es la 1 opcionElegidaLetras será igual a la opcionA
@@ -173,5 +189,75 @@ const juego = {
             "estadoDeJuego"
         ).innerHTML = `Ganaste el juego, te llevás ${this.dineroGanado} a tu casa`;
         this.limpiarJuego();
+    },
+    boton50: function () {
+        //declaro respuestaCorrecta50 como la respuesta correcta
+        switch (preguntas["pregunta" + this.preguntaRandom].respuestaCorrecta) {
+            case preguntas["pregunta" + this.preguntaRandom].opcionA:
+                this.respuestaCorrecta50 = 1;
+                break;
+            case preguntas["pregunta" + this.preguntaRandom].opcionB:
+                this.respuestaCorrecta50 = 2;
+                break;
+            case preguntas["pregunta" + this.preguntaRandom].opcionC:
+                this.respuestaCorrecta50 = 3;
+                break;
+            case preguntas["pregunta" + this.preguntaRandom].opcionD:
+                this.respuestaCorrecta50 = 4;
+                break;
+        }
+        //declaro desactivadorRandom1, su valor determinará el primer numero que se desactive
+        while (
+            !(
+                this.desactivadorRandom1 !== this.respuestaCorrecta50 &&
+                1 <= this.desactivadorRandom1 &&
+                this.desactivadorRandom1 <= 4
+            )
+        ) {
+            this.desactivadorRandom1 = Math.trunc(Math.random() * 10);
+        }
+        //declaro desactivadorRandom2, su valor determinará el primer numero que se desactive
+        while (
+            !(
+                this.desactivadorRandom2 !== this.desactivadorRandom1 &&
+                this.desactivadorRandom2 !== this.respuestaCorrecta50 &&
+                1 <= this.desactivadorRandom2 &&
+                this.desactivadorRandom2 <= 4
+            )
+        ) {
+            this.desactivadorRandom2 = Math.trunc(Math.random() * 10);
+        }
+        //desactivo el boton que corresponda segun el valor de desactivadorRandom1
+        switch (this.desactivadorRandom1) {
+            case 1:
+                document.getElementById("botonRespuesta1").disabled = true;
+                break;
+            case 2:
+                document.getElementById("botonRespuesta2").disabled = true;
+                break;
+            case 3:
+                document.getElementById("botonRespuesta3").disabled = true;
+                break;
+            case 4:
+                document.getElementById("botonRespuesta4").disabled = true;
+                break;
+        }
+        //desactivo el boton que corresponda segun el valor de desactivadorRandom2
+        switch (this.desactivadorRandom2) {
+            case 1:
+                document.getElementById("botonRespuesta1").disabled = true;
+                break;
+            case 2:
+                document.getElementById("botonRespuesta2").disabled = true;
+                break;
+            case 3:
+                document.getElementById("botonRespuesta3").disabled = true;
+                break;
+            case 4:
+                document.getElementById("botonRespuesta4").disabled = true;
+                break;
+        }
+        //desactivo el boton para que no se pueda usar de vuelta hasta que se reinicie la partida
+        document.getElementById("boton50").disabled = true;
     },
 };
