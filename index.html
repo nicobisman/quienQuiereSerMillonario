@@ -50,10 +50,16 @@
             </tr>
             <tr>
                 <td><button onclick="juego.boton50()" id="boton50">50/50</button></td>
-                <td><button id="botonPublico">Consulta al publico</button></td>
+                <td>
+                    <button id="botonPublico" onclick="juego.botonAyuda('publico')">Consulta al publico</button>
+                    <h5 id="espacioPublico"></h5>
+                </td>
             </tr>
             <tr>
-                <td><button id="botonAmigo">Llama a un amigo</button></td>
+                <td>
+                    <button id="botonAmigo" onclick="juego.botonAyuda('amigo')">Llama a un amigo</button>
+                    <h5 id="espacioAmigo"></h5>
+                </td>
             </tr>
         </table>
         <br />
