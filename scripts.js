@@ -89,8 +89,8 @@ const juego = {
         }
     },
     randomizadorPreguntas: function () {
-        //guarda en pregunta random un numero del 0 al 15
-        this.preguntaRandom = Math.floor(Math.random() * 15) + 1;
+        //guarda en pregunta random un numero del 1 al de la cantidad de preguntas
+        this.preguntaRandom = Math.floor(Math.random() * Object.keys(preguntas).length) + 1;
         //si la pregunta ya fue elegida hay recursividad
         if (this.preguntasUsadas.includes(this.preguntaRandom)) {
             this.randomizadorPreguntas();
@@ -112,25 +112,25 @@ const juego = {
     logicaPreguntas: function (opcionElegida) {
         this.limpiarPreguntasPorComodines();
         this.gestionarComodines("logicaPreguntas");
-        let opcionElegidaL;
+        let opcionElegidaLetras;
         switch (opcionElegida) {
             //si la opcion elegida es la 1 opcionElegidaLetras será igual a la opcionA
             case 1:
-                opcionElegidaL = preguntas["pregunta" + this.preguntaRandom].opcionA;
+                opcionElegidaLetras = preguntas["pregunta" + this.preguntaRandom].opcionA;
                 break;
             case 2:
-                opcionElegidaL = preguntas["pregunta" + this.preguntaRandom].opcionB;
+                opcionElegidaLetras = preguntas["pregunta" + this.preguntaRandom].opcionB;
                 break;
             case 3:
-                opcionElegidaL = preguntas["pregunta" + this.preguntaRandom].opcionC;
+                opcionElegidaLetras = preguntas["pregunta" + this.preguntaRandom].opcionC;
                 break;
             case 4:
-                opcionElegidaL = preguntas["pregunta" + this.preguntaRandom].opcionD;
+                opcionElegidaLetras = preguntas["pregunta" + this.preguntaRandom].opcionD;
                 break;
         }
         switch (preguntas["pregunta" + this.preguntaRandom].respuestaCorrecta) {
             //activa todos los botones, menos el de empezar que lo desactiva
-            case opcionElegidaL:
+            case opcionElegidaLetras:
                 this.preguntasContestadas++;
                 this.megaFuncionPreguntas();
                 break;
@@ -160,14 +160,14 @@ const juego = {
                 break;
             //si se gano dinero se imprime otro
             default:
-                alert(`Perdiste, podrías haber ganado ${this.dineroGanado}`);
+                alert(`Perdiste, podrías haber ganado ${this.dineroGanado} si te retirabas`);
         }
         this.limpiarJuego();
     },
     ganar: function () {
         this.modificarInformacion();
         //se imprime un mensaje felicitando la victoria
-        alert(`Ganaste el juego, te llevás ${this.dineroGanado} a tu casa`);
+        alert(`Felicitaciones, ganaste el juego, te llevás ${this.dineroGanado} a tu casa`);
         this.limpiarJuego();
     },
     boton50: function () {
@@ -189,12 +189,15 @@ const juego = {
                 respuestaCorrecta50 = 4;
                 break;
         }
+        //declaro desactivadorRandom1 como el primer numero a desactivar
         do {
             desactivadorRandom1 = Math.trunc(Math.random() * 4) + 1;
         } while (!(desactivadorRandom1 !== respuestaCorrecta50));
+        //declaro desactivadorRandom2 como el segundo numero a desactivar
         do {
             desactivadorRandom2 = Math.trunc(Math.random() * 4) + 1;
         } while (!(desactivadorRandom2 !== respuestaCorrecta50 && desactivadorRandom2 !== desactivadorRandom1));
+        //desactivo el boton que corresponda segun el valor de desactivadorRandom1
         switch (desactivadorRandom1) {
             case 1:
                 botonRespuesta1HTML.disabled = true;
@@ -224,14 +227,13 @@ const juego = {
                 botonRespuesta4HTML.disabled = true;
                 break;
         }
-        //desactivo el boton para que no se pueda usar de vuelta hasta que se reinicie la partida
         this.gestionarComodines("boton50");
     },
     botonAyuda: function (quien) {
-        //declaro respuestaCorrectaAyuda como respuesta correcta
         let respuestaCorrectaAyuda;
         let respuestaIncorrectaAyuda = [];
         let numeroAyuda;
+        //declaro respuestaCorrectaAyuda como la opcion correcta
         respuestaCorrectaAyuda = preguntas["pregunta" + this.preguntaRandom].respuestaCorrecta;
         //declaro respuestaIncorrectaAyuda como todas las opciones incorrectas
         switch (preguntas["pregunta" + this.preguntaRandom].respuestaCorrecta) {
@@ -261,28 +263,28 @@ const juego = {
         switch (quien) {
             //si se ha llamado desde el boton ayuda del publico
             case "publico":
-                this.gestionarComodines("botonPublico");
-                //si el numero está entre [1, 7]
+                //si el numero está entre [1, 9]
                 if (numeroAyuda <= 9) {
                     //el publico dara la respuesta correcta
                     espacioPublicoHTML.innerHTML = `El público cree que la respuesta es ${respuestaCorrectaAyuda}`;
                 } else {
-                    //si el numero esta entre [8, 10] el publico dará la respuesta una respuesta incorrecta random
+                    //si el numero es 10 el publico dará la respuesta una respuesta incorrecta random
                     espacioPublicoHTML.innerHTML = `El público cree que la respuesta es ${
                         respuestaIncorrectaAyuda[Math.floor(Math.random() * 3)]
                     }`;
                 }
+                this.gestionarComodines("botonPublico");
                 break;
             //si se ha llamado desde el boton ayuda de amigo
             case "amigo":
-                this.gestionarComodines("botonAmigo");
                 if (numeroAyuda <= 7) {
                     espacioAmigoHTML.innerHTML = `Hola amigo, creo que la respuesta correcta es ${respuestaCorrectaAyuda}`;
                 } else {
-                    espacioAmigoHTML.innerHTML = `Hola amigo, creo que la respuesta correcta es ${
+                    espacioAmigoHTML.innerHTML = `Tu amigo cree que la respuesta correcta es ${
                         respuestaIncorrectaAyuda[Math.floor(Math.random() * 3)]
                     }`;
                 }
+                this.gestionarComodines("botonAmigo");
                 break;
         }
     },
