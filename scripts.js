@@ -1,5 +1,4 @@
 //declaro las variables html de botones
-
 const botonRespuesta1HTML = document.getElementById("botonRespuesta1");
 const botonRespuesta2HTML = document.getElementById("botonRespuesta2");
 const botonRespuesta3HTML = document.getElementById("botonRespuesta3");
@@ -24,12 +23,10 @@ const juego = {
     dineroGanado: 0,
     preguntaRandom: 0,
     preguntasUsadas: [],
-    respuestaCorrecta50: null,
-    desactivadorRandom1: null,
-    desactivadorRandom2: null,
-    respuestaCorrectaAyuda: null,
-    respuestaIncorrectaAyuda: [],
-    numeroAyuda: null,
+    boton50FueUsado: false,
+    botonPublicoFueUsado: false,
+    botonAmigoFueUsado: false,
+
     limpiarJuego: function () {
         //limpia los datos del juego para reiniciar
         estadoDeJuegoHTML.innerHTML = "El juego no ha comenzado";
@@ -47,8 +44,10 @@ const juego = {
         this.preguntasContestadas = 0;
         this.dineroGanado = 0;
         this.preguntasUsadas = [];
-        this.desactivadorRandom1 = null;
-        this.desactivadorRandom2 = null;
+        this.boton50FueUsado = false;
+        this.botonPublicoFueUsado = false;
+        this.botonAmigoFueUsado = false;
+        //desactiva los botones
         this.desactivarBotones();
     },
     empezar: function () {
@@ -112,6 +111,7 @@ const juego = {
     //el parametro opcionElegida depende del boton tocado
     logicaPreguntas: function (opcionElegida) {
         this.limpiarPreguntasPorComodines();
+        this.gestionarComodines("logicaPreguntas");
         let opcionElegidaL;
         switch (opcionElegida) {
             //si la opcion elegida es la 1 opcionElegidaLetras será igual a la opcionA
@@ -171,44 +171,31 @@ const juego = {
         this.limpiarJuego();
     },
     boton50: function () {
+        let respuestaCorrecta50;
+        let desactivadorRandom1;
+        let desactivadorRandom2;
         //declaro respuestaCorrecta50 como la respuesta correcta
         switch (preguntas["pregunta" + this.preguntaRandom].respuestaCorrecta) {
             case preguntas["pregunta" + this.preguntaRandom].opcionA:
-                this.respuestaCorrecta50 = 1;
+                respuestaCorrecta50 = 1;
                 break;
             case preguntas["pregunta" + this.preguntaRandom].opcionB:
-                this.respuestaCorrecta50 = 2;
+                respuestaCorrecta50 = 2;
                 break;
             case preguntas["pregunta" + this.preguntaRandom].opcionC:
-                this.respuestaCorrecta50 = 3;
+                respuestaCorrecta50 = 3;
                 break;
             case preguntas["pregunta" + this.preguntaRandom].opcionD:
-                this.respuestaCorrecta50 = 4;
+                respuestaCorrecta50 = 4;
                 break;
         }
-        //declaro desactivadorRandom1, su valor determinará el primer numero que se desactive
-        while (
-            !(
-                this.desactivadorRandom1 !== this.respuestaCorrecta50 &&
-                1 <= this.desactivadorRandom1 &&
-                this.desactivadorRandom1 <= 4
-            )
-        ) {
-            this.desactivadorRandom1 = Math.trunc(Math.random() * 10);
-        }
-        //declaro desactivadorRandom2, su valor determinará el primer numero que se desactive
-        while (
-            !(
-                this.desactivadorRandom2 !== this.desactivadorRandom1 &&
-                this.desactivadorRandom2 !== this.respuestaCorrecta50 &&
-                1 <= this.desactivadorRandom2 &&
-                this.desactivadorRandom2 <= 4
-            )
-        ) {
-            this.desactivadorRandom2 = Math.trunc(Math.random() * 10);
-        }
-        //desactivo el boton que corresponda segun el valor de desactivadorRandom1
-        switch (this.desactivadorRandom1) {
+        do {
+            desactivadorRandom1 = Math.trunc(Math.random() * 4) + 1;
+        } while (!(desactivadorRandom1 !== respuestaCorrecta50));
+        do {
+            desactivadorRandom2 = Math.trunc(Math.random() * 4) + 1;
+        } while (!(desactivadorRandom2 !== respuestaCorrecta50 && desactivadorRandom2 !== desactivadorRandom1));
+        switch (desactivadorRandom1) {
             case 1:
                 botonRespuesta1HTML.disabled = true;
                 break;
@@ -223,7 +210,7 @@ const juego = {
                 break;
         }
         //desactivo el boton que corresponda segun el valor de desactivadorRandom2
-        switch (this.desactivadorRandom2) {
+        switch (desactivadorRandom2) {
             case 1:
                 botonRespuesta1HTML.disabled = true;
                 break;
@@ -238,61 +225,100 @@ const juego = {
                 break;
         }
         //desactivo el boton para que no se pueda usar de vuelta hasta que se reinicie la partida
-        boton50HTML.disabled = true;
+        this.gestionarComodines("boton50");
     },
     botonAyuda: function (quien) {
         //declaro respuestaCorrectaAyuda como respuesta correcta
-        this.respuestaCorrectaAyuda = preguntas["pregunta" + this.preguntaRandom].respuestaCorrecta;
+        let respuestaCorrectaAyuda;
+        let respuestaIncorrectaAyuda = [];
+        let numeroAyuda;
+        respuestaCorrectaAyuda = preguntas["pregunta" + this.preguntaRandom].respuestaCorrecta;
         //declaro respuestaIncorrectaAyuda como todas las opciones incorrectas
         switch (preguntas["pregunta" + this.preguntaRandom].respuestaCorrecta) {
             case preguntas["pregunta" + this.preguntaRandom].opcionA:
-                this.respuestaIncorrectaAyuda.push(preguntas["pregunta" + this.preguntaRandom].opcionB);
-                this.respuestaIncorrectaAyuda.push(preguntas["pregunta" + this.preguntaRandom].opcionC);
-                this.respuestaIncorrectaAyuda.push(preguntas["pregunta" + this.preguntaRandom].opcionD);
+                respuestaIncorrectaAyuda.push(preguntas["pregunta" + this.preguntaRandom].opcionB);
+                respuestaIncorrectaAyuda.push(preguntas["pregunta" + this.preguntaRandom].opcionC);
+                respuestaIncorrectaAyuda.push(preguntas["pregunta" + this.preguntaRandom].opcionD);
                 break;
             case preguntas["pregunta" + this.preguntaRandom].opcionB:
-                this.respuestaIncorrectaAyuda.push(preguntas["pregunta" + this.preguntaRandom].opcionC);
-                this.respuestaIncorrectaAyuda.push(preguntas["pregunta" + this.preguntaRandom].opcionD);
-                this.respuestaIncorrectaAyuda.push(preguntas["pregunta" + this.preguntaRandom].opcionA);
+                respuestaIncorrectaAyuda.push(preguntas["pregunta" + this.preguntaRandom].opcionC);
+                respuestaIncorrectaAyuda.push(preguntas["pregunta" + this.preguntaRandom].opcionD);
+                respuestaIncorrectaAyuda.push(preguntas["pregunta" + this.preguntaRandom].opcionA);
                 break;
             case preguntas["pregunta" + this.preguntaRandom].opcionC:
-                this.respuestaIncorrectaAyuda.push(preguntas["pregunta" + this.preguntaRandom].opcionD);
-                this.respuestaIncorrectaAyuda.push(preguntas["pregunta" + this.preguntaRandom].opcionA);
-                this.respuestaIncorrectaAyuda.push(preguntas["pregunta" + this.preguntaRandom].opcionB);
+                respuestaIncorrectaAyuda.push(preguntas["pregunta" + this.preguntaRandom].opcionD);
+                respuestaIncorrectaAyuda.push(preguntas["pregunta" + this.preguntaRandom].opcionA);
+                respuestaIncorrectaAyuda.push(preguntas["pregunta" + this.preguntaRandom].opcionB);
                 break;
             case preguntas["pregunta" + this.preguntaRandom].opcionD:
-                this.respuestaIncorrectaAyuda.push(preguntas["pregunta" + this.preguntaRandom].opcionA);
-                this.respuestaIncorrectaAyuda.push(preguntas["pregunta" + this.preguntaRandom].opcionB);
-                this.respuestaIncorrectaAyuda.push(preguntas["pregunta" + this.preguntaRandom].opcionC);
+                respuestaIncorrectaAyuda.push(preguntas["pregunta" + this.preguntaRandom].opcionA);
+                respuestaIncorrectaAyuda.push(preguntas["pregunta" + this.preguntaRandom].opcionB);
+                respuestaIncorrectaAyuda.push(preguntas["pregunta" + this.preguntaRandom].opcionC);
                 break;
         }
         //genero un numero random entre [1, 10]
-        this.numeroAyuda = Math.floor(Math.random() * 10 + 1);
+        numeroAyuda = Math.floor(Math.random() * 10 + 1);
         switch (quien) {
             //si se ha llamado desde el boton ayuda del publico
             case "publico":
-                //desactivo el boton del boton ayuda del publico para que no se pueda volver a usar
-                document.getElementById("botonPublico").disabled = true;
+                this.gestionarComodines("botonPublico");
                 //si el numero está entre [1, 7]
-                if (this.numeroAyuda <= 7) {
+                if (numeroAyuda <= 9) {
                     //el publico dara la respuesta correcta
-                    espacioPublicoHTML.innerHTML = `El público cree que la respuesta es ${this.respuestaCorrectaAyuda}`;
+                    espacioPublicoHTML.innerHTML = `El público cree que la respuesta es ${respuestaCorrectaAyuda}`;
                 } else {
                     //si el numero esta entre [8, 10] el publico dará la respuesta una respuesta incorrecta random
-                    document.getElementById("espacioPublico").innerHTML = `El público cree que la respuesta es ${
-                        this.respuestaIncorrectaAyuda[Math.floor(Math.random() * 3)]
+                    espacioPublicoHTML.innerHTML = `El público cree que la respuesta es ${
+                        respuestaIncorrectaAyuda[Math.floor(Math.random() * 3)]
                     }`;
                 }
                 break;
             //si se ha llamado desde el boton ayuda de amigo
             case "amigo":
-                botonAmigoHTML.disabled = true;
-                if (this.numeroAyuda <= 7) {
-                    espacioAmigoHTML.innerHTML = `Hola amigo, creo que la respuesta correcta es ${this.respuestaCorrectaAyuda}`;
+                this.gestionarComodines("botonAmigo");
+                if (numeroAyuda <= 7) {
+                    espacioAmigoHTML.innerHTML = `Hola amigo, creo que la respuesta correcta es ${respuestaCorrectaAyuda}`;
                 } else {
                     espacioAmigoHTML.innerHTML = `Hola amigo, creo que la respuesta correcta es ${
-                        this.respuestaIncorrectaAyuda[Math.floor(Math.random() * 3)]
+                        respuestaIncorrectaAyuda[Math.floor(Math.random() * 3)]
                     }`;
+                }
+                break;
+        }
+    },
+    gestionarComodines: function (donde) {
+        switch (donde) {
+            //si se llamo a la funcion desde boton 50, se desactivan los tres botones y
+            //boton50FueUsado se convierte en true, para luego desavilitarlo definitivamente
+            case "boton50":
+                boton50HTML.disabled = true;
+                botonPublicoHTML.disabled = true;
+                botonAmigoHTML.disabled = true;
+                this.boton50FueUsado = true;
+                break;
+            case "botonPublico":
+                boton50HTML.disabled = true;
+                botonPublicoHTML.disabled = true;
+                botonAmigoHTML.disabled = true;
+                this.botonPublicoFueUsado = true;
+                break;
+            case "botonAmigo":
+                boton50HTML.disabled = true;
+                botonPublicoHTML.disabled = true;
+                botonAmigoHTML.disabled = true;
+                this.botonAmigoFueUsado = true;
+                break;
+            //si fue llamado desde logicaPreguntas, se habilitan los botones que fueron
+            //temporalmente deshabilitados
+            case "logicaPreguntas":
+                if (this.boton50FueUsado == false) {
+                    boton50HTML.disabled = false;
+                }
+                if (this.botonPublicoFueUsado == false) {
+                    botonPublicoHTML.disabled = false;
+                }
+                if (this.botonAmigoFueUsado == false) {
+                    botonAmigoHTML.disabled = false;
                 }
                 break;
         }
