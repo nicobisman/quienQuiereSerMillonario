@@ -1,3 +1,6 @@
+//declaro la cantidad de preguntas que hay en la base de datos
+const cantidadPreguntas = Object.keys(preguntas).length;
+
 //declaro las variables html de botones
 const botonRespuesta1HTML = document.getElementById("botonRespuesta1");
 const botonRespuesta2HTML = document.getElementById("botonRespuesta2");
@@ -16,6 +19,10 @@ const espacioAmigoHTML = document.getElementById("espacioAmigo");
 const espacioPublicoHTML = document.getElementById("espacioPublico");
 const estadoDeJuegoHTML = document.getElementById("estadoDeJuego");
 const preguntaHTML = document.getElementById("pregunta");
+const espacioRequerimientoPreguntasHTML = document.getElementById("espacioRequerimientoPreguntas");
+
+//declaro las variables html de input
+const inputNumeroPreguntasHTML = document.getElementById("numeroPreguntas");
 
 const juego = {
     //declaro las variables que controlan el juego
@@ -26,7 +33,7 @@ const juego = {
     boton50FueUsado: false,
     botonPublicoFueUsado: false,
     botonAmigoFueUsado: false,
-
+    numeroPreguntasElegidas: null,
     limpiarJuego: function () {
         //limpia los datos del juego para reiniciar
         estadoDeJuegoHTML.innerHTML = "El juego no ha comenzado";
@@ -39,6 +46,8 @@ const juego = {
         botonRespuesta2HTML.innerHTML = "Respuesta 2";
         botonRespuesta3HTML.innerHTML = "Respuesta 3";
         botonRespuesta4HTML.innerHTML = "Respuesta 4";
+        espacioRequerimientoPreguntasHTML.innerHTML = `Selecciona la cantidad de preguntas que determinarán la condición del juego. Deben ser numeros enteros entre 5 y ${cantidadPreguntas}.`;
+        inputNumeroPreguntasHTML.value = "";
         //resetea las variables
         this.preguntaRandom = 0;
         this.preguntasContestadas = 0;
@@ -50,6 +59,27 @@ const juego = {
         //desactiva los botones
         this.desactivarBotones();
     },
+    enviarPreguntas: function () {
+        //declaro numeroPreguntasElegidas como int, de inputNumero
+        this.numeroPreguntasElegidas = parseInt(inputNumeroPreguntasHTML.value);
+        //si el numero no cumple con los requisitos
+        if (5 > this.numeroPreguntasElegidas) {
+            inputNumeroPreguntasHTML.value = "";
+            alert("El numero debe ser mayor o igual que 5");
+        } else if (this.numeroPreguntasElegidas > cantidadPreguntas) {
+            inputNumeroPreguntasHTML.value = "";
+            alert(`El numero debe ser menor o igual que ${cantidadPreguntas}`);
+        } else if (isNaN(this.numeroPreguntasElegidas)) {
+            inputNumeroPreguntasHTML.value = "";
+            alert("Debes insertar un número");
+        } else if (inputNumeroPreguntasHTML.value !== this.numeroPreguntasElegidas.toString()) {
+            inputNumeroPreguntasHTML.value = "";
+            alert("El numero debe ser entero");
+        } else {
+            //si el numero cumple con los requisitos empieza el juego
+            this.empezar();
+        }
+    },
     empezar: function () {
         this.activarBotones();
         //imprime en pantalla que se está en partida
@@ -58,7 +88,7 @@ const juego = {
     },
     megaFuncionPreguntas: function () {
         //si preguntasContestadas es 5 se gana
-        if (this.preguntasContestadas == 5) {
+        if (this.preguntasContestadas == this.numeroPreguntasElegidas) {
             this.ganar();
         } else {
             //si no continúa el juego
@@ -67,26 +97,32 @@ const juego = {
             this.modificarBotonesYPreguntas();
         }
     },
-    modificarInformacion: function () {
-        //imprime en pantalla cuantas preguntas se contestaron
-        preguntasContestadasHTML.innerHTML = `Preguntas contestadas: ${this.preguntasContestadas}`;
+    calcularDineroGanado: function () {
         switch (this.preguntasContestadas) {
             case 0:
-                //si no se contesto ninguna pregunta el premio actual es 0
-                premioActualHTML.innerHTML = "Premio actual: 0";
+                //si no se contesto ninguna pregunta el dinero ganado es 0
+                this.dineroGanado = 0;
+                break;
+            case this.numeroPreguntasElegidas:
+                this.dineroGanado = 1000000;
                 break;
             default:
                 //si se ha contestado alguna se calculara con la funcion y=15^x
-                this.dineroGanado = Math.pow(1000000, 1 / 5) ** this.preguntasContestadas;
+                this.dineroGanado = Math.pow(1000000, 1 / this.numeroPreguntasElegidas) ** this.preguntasContestadas;
                 //se sacan los decimales
                 this.dineroGanado = Math.trunc(this.dineroGanado);
                 //se agregan los puntos
-                this.dineroGanado = this.dineroGanado.toLocaleString();
-                this.dineroGanado = `$${this.dineroGanado}`;
-                //imprime en pantalla el dinero ganado
-                premioActualHTML.innerHTML = `Premio actual: ${this.dineroGanado}`;
+                this.dineroGanado = this.dineroGanado;
                 break;
         }
+        this.dineroGanado = `$${this.dineroGanado.toLocaleString()}`;
+    },
+    modificarInformacion: function () {
+        this.calcularDineroGanado();
+        //imprime en pantalla el dinero ganado
+        premioActualHTML.innerHTML = `Premio actual: ${this.dineroGanado}`;
+        //imprime en pantalla cuantas preguntas se contestaron
+        preguntasContestadasHTML.innerHTML = `Preguntas contestadas: ${this.preguntasContestadas}`;
     },
     randomizadorPreguntas: function () {
         //guarda en pregunta random un numero del 1 al de la cantidad de preguntas
@@ -165,7 +201,6 @@ const juego = {
         this.limpiarJuego();
     },
     ganar: function () {
-        this.modificarInformacion();
         //se imprime un mensaje felicitando la victoria
         alert(`Felicitaciones, ganaste el juego, te llevás ${this.dineroGanado} a tu casa`);
         this.limpiarJuego();
@@ -278,7 +313,7 @@ const juego = {
             //si se ha llamado desde el boton ayuda de amigo
             case "amigo":
                 if (numeroAyuda <= 7) {
-                    espacioAmigoHTML.innerHTML = `Hola amigo, creo que la respuesta correcta es ${respuestaCorrectaAyuda}`;
+                    espacioAmigoHTML.innerHTML = `Tu amigo cree que la respuesta correcta es ${respuestaCorrectaAyuda}`;
                 } else {
                     espacioAmigoHTML.innerHTML = `Tu amigo cree que la respuesta correcta es ${
                         respuestaIncorrectaAyuda[Math.floor(Math.random() * 3)]
@@ -343,6 +378,7 @@ const juego = {
         botonAmigoHTML.disabled = false;
         botonRetirarseHTML.disabled = false;
         botonEmpezarHTML.disabled = true;
+        inputNumeroPreguntasHTML.disabled = true;
     },
 
     desactivarBotones: function () {
@@ -356,6 +392,7 @@ const juego = {
         botonAmigoHTML.disabled = true;
         botonRetirarseHTML.disabled = true;
         botonEmpezarHTML.disabled = false;
+        inputNumeroPreguntasHTML.disabled = false;
     },
 
     activarBotonesRespuestas: function () {

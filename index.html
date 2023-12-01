@@ -66,12 +66,24 @@
             </tr>
         </table>
         <br />
+
+        <br />
         <table>
             <tr>
-                <td colspan="2">Botones</td>
+                Botones
             </tr>
             <tr>
-                <td><button id="botonEmpezar" onclick="juego.empezar()">Empezar</button></td>
+                <td id="espacioRequerimientoPreguntas"></td>
+            </tr>
+            <tr>
+                <td>
+                    <input id="numeroPreguntas" type="number" ste />
+                </td>
+            </tr>
+            <tr>
+                <td><button id="botonEmpezar" onclick="juego.enviarPreguntas()">Empezar</button></td>
+            </tr>
+            <tr>
                 <td><button id="botonRetirarse" onclick="juego.retirarse()">Retirarse</button></td>
             </tr>
         </table>
