@@ -46,7 +46,7 @@ const juego = {
         botonRespuesta2HTML.innerHTML = "Respuesta 2";
         botonRespuesta3HTML.innerHTML = "Respuesta 3";
         botonRespuesta4HTML.innerHTML = "Respuesta 4";
-        espacioRequerimientoPreguntasHTML.innerHTML = `Selecciona la cantidad de preguntas que determinarán la condición del juego. Deben ser numeros enteros entre 5 y ${cantidadPreguntas}.`;
+        espacioRequerimientoPreguntasHTML.innerHTML = `Selecciona la cantidad de preguntas que determinarán la duración del juego. Deben ser numeros enteros entre 5 y ${cantidadPreguntas}.`;
         inputNumeroPreguntasHTML.value = "";
         //resetea las variables
         this.preguntaRandom = 0;
@@ -201,6 +201,7 @@ const juego = {
         this.limpiarJuego();
     },
     ganar: function () {
+        this.calcularDineroGanado;
         //se imprime un mensaje felicitando la victoria
         alert(`Felicitaciones, ganaste el juego, te llevás ${this.dineroGanado} a tu casa`);
         this.limpiarJuego();
