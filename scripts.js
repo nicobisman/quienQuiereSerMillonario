@@ -30,40 +30,6 @@ const juego = {
     respuestaCorrectaAyuda: null,
     respuestaIncorrectaAyuda: [],
     numeroAyuda: null,
-
-    activarBotones: function () {
-        //activa todos los botones, menos el de empezar que lo desactiva
-        botonRespuesta1HTML.disabled = false;
-        botonRespuesta2HTML.disabled = false;
-        botonRespuesta3HTML.disabled = false;
-        botonRespuesta4HTML.disabled = false;
-        boton50HTML.disabled = false;
-        botonPublicoHTML.disabled = false;
-        botonAmigoHTML.disabled = false;
-        botonRetirarseHTML.disabled = false;
-        botonEmpezarHTML.disabled = true;
-    },
-
-    desactivarBotones: function () {
-        //desactiva todos los botones, menos el de empezar que lo activa
-        botonRespuesta1HTML.disabled = true;
-        botonRespuesta2HTML.disabled = true;
-        botonRespuesta3HTML.disabled = true;
-        botonRespuesta4HTML.disabled = true;
-        boton50HTML.disabled = true;
-        botonPublicoHTML.disabled = true;
-        botonAmigoHTML.disabled = true;
-        botonRetirarseHTML.disabled = true;
-        botonEmpezarHTML.disabled = false;
-    },
-
-    activarBotonesRespuestas: function () {
-        //activa todos los botones de respuestas
-        botonRespuesta1HTML.disabled = false;
-        botonRespuesta2HTML.disabled = false;
-        botonRespuesta3HTML.disabled = false;
-        botonRespuesta4HTML.disabled = false;
-    },
     limpiarJuego: function () {
         //limpia los datos del juego para reiniciar
         estadoDeJuegoHTML.innerHTML = "El juego no ha comenzado";
@@ -119,7 +85,7 @@ const juego = {
                 this.dineroGanado = this.dineroGanado.toLocaleString();
                 this.dineroGanado = `$${this.dineroGanado}`;
                 //imprime en pantalla el dinero ganado
-                document.getElementById("premioActual").innerHTML = `Premio actual: ${this.dineroGanado}`;
+                premioActualHTML.innerHTML = `Premio actual: ${this.dineroGanado}`;
                 break;
         }
     },
@@ -142,13 +108,6 @@ const juego = {
         botonRespuesta2HTML.innerHTML = preguntas["pregunta" + this.preguntaRandom].opcionB;
         botonRespuesta3HTML.innerHTML = preguntas["pregunta" + this.preguntaRandom].opcionC;
         botonRespuesta4HTML.innerHTML = preguntas["pregunta" + this.preguntaRandom].opcionD;
-    },
-    limpiarPreguntasPorComodines: function () {
-        //activo los botones por si se ha tocado anteriormente el botón50
-        this.activarBotonesRespuestas();
-        //vacio eso por si se ha usado algun boton de ayuda
-        espacioAmigoHTML.innerHTML = "";
-        espacioPublicoHTML.innerHTML = "";
     },
     //el parametro opcionElegida depende del boton tocado
     logicaPreguntas: function (opcionElegida) {
@@ -206,6 +165,7 @@ const juego = {
         this.limpiarJuego();
     },
     ganar: function () {
+        this.modificarInformacion();
         //se imprime un mensaje felicitando la victoria
         alert(`Ganaste el juego, te llevás ${this.dineroGanado} a tu casa`);
         this.limpiarJuego();
@@ -316,10 +276,10 @@ const juego = {
                 //si el numero está entre [1, 7]
                 if (this.numeroAyuda <= 7) {
                     //el publico dara la respuesta correcta
-                    espacioPublicoHTML.innerHTML = `El publico cree que la respuesta es ${this.respuestaCorrectaAyuda}`;
+                    espacioPublicoHTML.innerHTML = `El público cree que la respuesta es ${this.respuestaCorrectaAyuda}`;
                 } else {
                     //si el numero esta entre [8, 10] el publico dará la respuesta una respuesta incorrecta random
-                    document.getElementById("espacioPublico").innerHTML = `El publico cree que la respuesta es ${
+                    document.getElementById("espacioPublico").innerHTML = `El público cree que la respuesta es ${
                         this.respuestaIncorrectaAyuda[Math.floor(Math.random() * 3)]
                     }`;
                 }
@@ -336,5 +296,45 @@ const juego = {
                 }
                 break;
         }
+    },
+    limpiarPreguntasPorComodines: function () {
+        //activo los botones por si se ha tocado anteriormente el botón50
+        this.activarBotonesRespuestas();
+        //vacio eso por si se ha usado algun boton de ayuda
+        espacioAmigoHTML.innerHTML = "";
+        espacioPublicoHTML.innerHTML = "";
+    },
+    activarBotones: function () {
+        //activa todos los botones, menos el de empezar que lo desactiva
+        botonRespuesta1HTML.disabled = false;
+        botonRespuesta2HTML.disabled = false;
+        botonRespuesta3HTML.disabled = false;
+        botonRespuesta4HTML.disabled = false;
+        boton50HTML.disabled = false;
+        botonPublicoHTML.disabled = false;
+        botonAmigoHTML.disabled = false;
+        botonRetirarseHTML.disabled = false;
+        botonEmpezarHTML.disabled = true;
+    },
+
+    desactivarBotones: function () {
+        //desactiva todos los botones, menos el de empezar que lo activa
+        botonRespuesta1HTML.disabled = true;
+        botonRespuesta2HTML.disabled = true;
+        botonRespuesta3HTML.disabled = true;
+        botonRespuesta4HTML.disabled = true;
+        boton50HTML.disabled = true;
+        botonPublicoHTML.disabled = true;
+        botonAmigoHTML.disabled = true;
+        botonRetirarseHTML.disabled = true;
+        botonEmpezarHTML.disabled = false;
+    },
+
+    activarBotonesRespuestas: function () {
+        //activa todos los botones de respuestas
+        botonRespuesta1HTML.disabled = false;
+        botonRespuesta2HTML.disabled = false;
+        botonRespuesta3HTML.disabled = false;
+        botonRespuesta4HTML.disabled = false;
     },
 };
