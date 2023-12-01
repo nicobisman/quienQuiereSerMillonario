@@ -201,7 +201,7 @@ const juego = {
         this.limpiarJuego();
     },
     ganar: function () {
-        this.calcularDineroGanado;
+        this.calcularDineroGanado();
         //se imprime un mensaje felicitando la victoria
         alert(`Felicitaciones, ganaste el juego, te llevás ${this.dineroGanado} a tu casa`);
         this.limpiarJuego();
